@@ -1,0 +1,614 @@
+/* Reset and General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Styles */
+.header {
+    background-color: #4d0000;
+    padding: 10px 0;
+    color: #fff;
+    text-align: center;
+    position: relative; /* Ensures dropdown menu is positioned correctly */
+}
+
+.header .logo {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.header .nav {
+    margin-top: 20px;
+}
+
+.header .nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+}
+
+.header .nav ul li {
+    margin: 0 15px;
+    position: relative;
+}
+
+.header .nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.header .nav ul li a:hover {
+    color: #f0f0f0;
+}
+
+.header .nav ul .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000; /* Ensure it is on top */
+    right: 0;
+}
+
+.header .nav ul .dropdown-content li {
+    padding: 12px 16px;
+}
+
+.header .nav ul .dropdown-content li a {
+    color: #333;
+    text-decoration: none;
+}
+
+.header .nav ul .dropdown-content li a:hover {
+    background-color: #ddd;
+}
+
+.header .nav ul li:hover .dropdown-content {
+    display: block;
+}
+
+/* Main Section Styles */
+.main {
+    padding: 40px 20px;
+}
+
+.welcome {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.welcome h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #4d0000;
+}
+
+.welcome p {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.apartment-listing h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #4d0000;
+}
+
+.apartment-listing .apartment {
+    width: 300px; /* Adjust width as needed */
+    padding: 15px; /* Reduced padding */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center; 
+}
+
+.apartment-listing .apartment:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.apartment-listing .apartment img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.apartment-listing .apartment h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #4d0000;
+}
+
+.apartment-listing .apartment p {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.apartment-listing .apartment .view-details {
+    background-color: #4d0000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.apartment-listing .apartment .view-details:hover {
+    background-color: #333;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Hide off-screen initially */
+    width: 250px;
+    height: 100%;
+    background-color: #4d0000;
+    color: #fff;
+    transition: left 0.3s ease;
+    padding: 20px;
+    z-index: 1000;
+}
+.sidebar.visible {
+    left: 0; /* Show sidebar when visible class is added */
+}
+
+/* Sidebar Menu Styles */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    color: #ddd;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+/* Hamburger Menu */
+.hamburger-menu {
+    cursor: pointer;
+    display: inline-block;
+    margin: 10px;
+}
+
+.hamburger-menu {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+}
+
+.hamburger-menu .bar {
+    width: 30px;
+    height: 3px;
+    background: #fff;
+    border-radius: 3px;
+}
+
+#sidebar {
+    position: fixed;
+    left: -250px;
+    width: 250px;
+    background-color: #30000;
+
+
+}
+#sidebar.active {
+    left: 0;
+}
+.close-btn {
+    cursor: pointer;
+    display: block;
+    margin: 10px;
+}
+
+/* User Profile Styles */
+#userProfile, #editProfileForm {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+#userProfile h3, #editProfileForm h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    margin-bottom: 15px;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-row input, .form-row select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-row input[type="submit"], .form-row button {
+    background-color: #003366;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-row input[type="submit"]:hover, .form-row button:hover {
+    background-color: #004080;
+}
+
+#bookingSection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#bookingSection p {
+    font-size: 1.2rem;
+    color: #4d0000;
+}
+
+#bookRoomBtn {
+    background-color: #4d0000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#bookRoomBtn:hover {
+    background-color: #333;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #4d0000;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer .footer-menu ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+}
+
+.footer .footer-menu ul li {
+    margin: 0 15px;
+}
+
+.footer .footer-menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer .footer-menu ul li a:hover {
+    color: #f0f0f0;
+}
+
+.footer .social-media {
+    margin-top: 10px;
+}
+
+.footer .social-media a {
+    color: #fff;
+    margin-right: 10px;
+}
+
+.footer .copyright {
+    margin-top: 20px;
+    font-size: 0.8rem;
+}
+
+.footer .social-media a:hover {
+    text-decoration: underline;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Notification List */
+#notificationList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#notificationList li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    display: none;
+}
+
+.notification.success {
+    background-color: #28a745;
+}
+
+.notification.error {
+    background-color: #dc3545;
+}
+
+/* Bell Icon for Notifications */
+.notification-bell {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.notification-bell .bell-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #333;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.notification-bell .bell-icon:hover {
+    background-color: #555;
+}
+
+.notification-bell .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: #fff;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Profile Icon
+/* Profile Icon Styles */
+.profile-container {
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    width: 50px; /* Increased size for visibility */
+    height: 50px; /* Increased size for visibility */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it is on top */
+}
+
+.profile-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 10px;
+    z-index: 1000; /* Ensure it is on top */
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Profile Menu Toggle */
+.profile-container:hover .dropdown-menu {
+    display: block;
+}
+
+/* styles.css */
+.auth-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.auth-buttons button {
+    margin: 0 5px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.auth-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    margin-bottom: 15px;
+}
+
+.form-row label {
+    margin-bottom: 5px;
+}
+
+.form-row input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}

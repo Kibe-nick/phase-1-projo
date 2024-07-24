@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The MODE Rentals</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">The MODE Rentals</div>
+            <div class="hamburger-menu">☰</div>
+            <nav class="sidebar" id="sidebar">
+                <button class="close-btn">X</button>
+                <ul>
+                    <li><a href="#home" id="homeLink">Home</a></li>
+                    <li><a href="#about" id="aboutLink">About Us</a></li>
+                    <li><a href="#contact" id="contactLink">Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button id="loginButton">Login</button>
+                <button id="registerButton">Register</button>
+            </div>
+                
+                <div class="profile-container">
+                    <img src="images/profile.jpg" id="profileIcon" alt="Profile Icon" class="profile-icon">
+                    <div id="profileDropdown" class="dropdown-menu" style="display: none;">
+                        <a href="#" id="viewProfile">View Profile</a>
+                        <a href="#" id="editProfile">Edit Profile</a>
+                        <a href="#" id="logout">Logout</a>
+                    </div>
+                </div>
+                <div class="notification-bell">
+                    <span class="bell-icon">🔔</span>
+                    <span class="notification-count">0</span>
+                </div>
+            </div>   
+    </div>
+</header>
+
+    <main class="main">
+        <section id="home">
+            <div class="container">
+                <section class="welcome">
+                    <h1>Welcome to The MODE Rentals</h1>
+                    <p>Your trusted partner in finding the perfect rental apartment. Explore our listings and register today to find your dream home.</p>
+                </section>
+
+                <section id="about" style="display: none;">
+                    <h2>About Us</h2>
+                    <p>Welcome to The MODE Rentals. We provide a seamless experience in finding and managing rental apartments. Our mission is to offer a range of quality apartments to meet your needs and budget.</p>
+                </section>
+
+                <section id="contact" style="display: none;">
+                    <h2>Contact Us</h2>
+                    <p>If you have any questions or need assistance, please reach out to us through the following channels:</p>
+                    <p>Email: nickkorir08@gmail.com</p>
+                    <p>Phone: +254790188240</p>
+                    <p>Address: 123 Moi Avenue, Eldoret, Kenya</p>
+                </section>
+
+                <section class="apartment-listing">
+                    <h2>Available Apartments</h2>
+                    <div class="apartment" data-apartment="unity_homes">
+                        <h3>Unity Homes</h3>
+                        <img src="images/unity.jpg" alt="Unity Homes">
+                        <p>50 rooms available</p>
+                        <button class="view-details">View Details</button>
+                    </div>
+                    <div class="apartment" data-apartment="brookvile_apartments">
+                        <h3>Brookvile Apartments</h3>
+                        <img src="images/brookvile.jpg" alt="Brookvile Apartments">
+                        <p>25 rooms available</p>
+                        <button class="view-details">View Details</button>
+                    </div>
+                </section>
+                <!-- Registration Form -->
+                <div id="registrationForm">
+                    <h2>Register</h2>
+                    <form id="registerForm">
+                        <label for="regName">Name:</label>
+                        <input type="text" id="regName" name="name" required>
+                        <label for="regEmail">Email:</label>
+                        <input type="email" id="regEmail" name="email" required>
+                        <label for="regPassword">Password:</label>
+                        <input type="password" id="regPassword" name="password" required>
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <h2>Login</h2>
+                    <form id="loginForm">
+                        <label for="loginEmail">Email:</label>
+                        <input type="email" id="loginEmail" name="email" required>
+                        <label for="loginPassword">Password:</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+
+                <!-- Edit Profile Form -->
+                <div id="editProfileForm" style="display: none;">
+                    <h3>Edit Profile</h3>
+                    <form id="updateProfileForm">
+                        <div class="form-row">
+                            <label for="updateName">Name:</label>
+                            <input type="text" id="updateName" name="updateName" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="updateEmail">Email:</label>
+                            <input type="email" id="updateEmail" name="updateEmail" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="updatePassword">Password:</label>
+                            <input type="password" id="updatePassword" name="updatePassword">
+                        </div>
+                        <div class="form-row">
+                            <label for="updateApartment">Apartment:</label>
+                            <select id="updateApartment" name="updateApartment">
+                                <option value="unity_homes">Unity Homes</option>
+                                <option value="brookvile_apartments">Brookvile Apartments</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label for="updateRoom">Room:</label>
+                            <input type="number" id="updateRoom" name="updateRoom" required>
+                        </div>
+                        <button type="submit">Update Profile</button>
+                        <button type="button" id="cancelEditProfile">Cancel</button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-menu">
+                <!-- Add footer links or information here if needed -->
+            </div>
+            <div class="social-media">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">Instagram</a>
+            </div>
+            <div class="copyright">
+                &copy; 2024 The MODE Rentals. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- User Registration Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeRegisterModal">&times;</span>
+            <h2>Register</h2>
+            <form id="registrationForm">
+                <div class="form-row">
+                    <label for="name">Name:</label>
+                    <input type="text" id="regName" name="name" required>
+                </div>
+                <div class="form-row">
+                    <label for="regEmail">Email:</label>
+                    <input type="email" id="regEmail" name="email" required>
+                </div>
+                <div class="form-row">
+                    <label for="password">Password:</label>
+                    <input type="password" id="regPassword" name="password" required>
+                </div>
+                <button type="submit">Register</button>
+                <p>Already have an account? <a href="#" id="showLoginModal">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>User Login</h2>
+            <form id="loginForm">
+                <div class="form-row">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                </div>
+                <div class="form-row">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+<!-- About Modal -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>About Us</h2>
+        <p>Welcome to The MODE Rentals. We provide a seamless experience in finding and managing rental apartments...</p>
+    </div>
+</div>
+
+<!-- Contact Modal -->
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Contact Us</h2>
+        <p>If you have any questions or need assistance, please reach out to us through the following channels:</p>
+        <p>Email: nickkorir08@gmail.com</p>
+        <p>Phone: +254790188240</p>
+        <p>Address: 123 Moi Avenue, Eldoret, Kenya</p>
+    </div>
+</div>
+
+    <!-- Apartment Details Modal -->
+    <div id="apartmentDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="apartmentDetailsContainer"></div>
+            <div id="bookingSection">
+                <p id="availabilityStatus"></p>
+                <button id="bookRoomBtn">Book Room</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Profile Modal -->
+    <div id="viewProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>User Profile</h2>
+            <p>Name: <span id="profileName"></span></p>
+            <p>Email: <span id="profileEmail"></span></p>
+            <p>Apartment: <span id="profileApartment"></span></p>
+            <p>Room: <span id="profileRoom"></span></p>
+        </div>
+    </div>
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Notifications</h2>
+            <ul id="notificationList">
+             <!-- Notifications will be dynamically inserted here -->
+                  </ul>
+        </div>
+    </div>
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="updateProfileForm">
+                <div class="form-row">
+                    <label for="updateName">Name:</label>
+                    <input type="text" id="updateName" name="updateName" required>
+                </div>
+                <div class="form-row">
+                    <label for="updateEmail">Email:</label>
+                    <input type="email" id="updateEmail" name="updateEmail" required>
+                </div>
+                <div class="form-row">
+                    <label for="updatePassword">Password:</label>
+                    <input type="password" id="updatePassword" name="updatePassword">
+                </div>
+                <div class="form-row">
+                    <label for="updateApartment">Apartment:</label>
+                    <select id="updateApartment" name="updateApartment">
+                        <option value="unity_homes">Unity Homes</option>
+                        <option value="brookvile_apartments">Brookvile Apartments</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="updateRoom">Room:</label>
+                    <input type="number" id="updateRoom" name="updateRoom" required>
+                </div>
+                <button type="submit">Update Profile</button>
+                <button type="button" id="cancelEditProfile">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

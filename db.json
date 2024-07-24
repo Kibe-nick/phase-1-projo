@@ -1,0 +1,60 @@
+{
+    "apartments": {
+      "unity_homes": {
+        "name": "Unity Homes",
+        "description": "A well-maintained apartment complex with 50 rooms.",
+        "rooms": [
+          { "id": 1, "number": 101, "price": 1000, "status": "available" },
+          { "id": 2, "number": 102, "price": 1000, "status": "available" }
+        ]
+      },
+      "brookvile_apartments": {
+        "name": "Brookvile Apartments",
+        "description": "A cozy apartment building with 25 rooms.",
+        "rooms": [
+          { "id": 1, "number": 201, "price": 1200, "status": "available" },
+          { "id": 2, "number": 202, "price": 1200, "status": "available" }
+        ]
+      }
+    },
+    "registeredUsers": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "password": "password123",
+        "apartment": "unity_homes",
+        "room": 101
+      },
+      {
+        "id": 2,
+        "name": "Jane Smith",
+        "email": "jane@example.com",
+        "password": "password123",
+        "apartment": "brookvile_apartments",
+        "room": 201
+      }
+    ],
+    "sessions": [
+      {
+        "userId": 1,
+        "sessionId": "abc123",
+        "expiresAt": "2024-12-31T23:59:59Z"
+      }
+    ],
+    "notifications": [
+      {
+        "id": 1,
+        "userId": 1,
+        "message": "Scheduled maintenance on July 20th.",
+        "read": false
+      },
+      {
+        "id": 2,
+        "userId": 2,
+        "message": "Rent due on August 1st.",
+        "read": false
+      }
+    ]
+  }
+  
