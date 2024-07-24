@@ -405,6 +405,15 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+/* Hide modals initially */
+.modal {
+    display: none;
+}
+
+/* Style buttons to open modals */
+button {
+    margin: 10px;
+}
 
 /* Notification List */
 #notificationList {
