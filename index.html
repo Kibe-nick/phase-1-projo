@@ -111,6 +111,7 @@
 
             </div>
         </section>
+        <ul id="user-list"></ul>
     </main>
 
     <footer class="footer">
@@ -133,7 +134,7 @@
     <div id="registerModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form id="registrationForm"></form>
+            <form id="register-form">
             <h2>Register</h2>
                 <label for="name">Name:</label>
                 <input type="text" id="name" required>
@@ -149,7 +150,7 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form id="loginForm"></form>
+            <form id="login-form">
             <h2>Login</h2>
                 <label for="loginEmail">Email:</label>
                 <input type="email" id="loginEmail" required>
@@ -208,7 +209,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Notifications</h2>
-            <ul id="notificationList">
+            <ul id="notification-list">
              <!-- Notifications will be dynamically inserted here -->
                   </ul>
         </div>

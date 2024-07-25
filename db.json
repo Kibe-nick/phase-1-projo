@@ -1,6 +1,7 @@
 {
-  "apartments": {
-    "unity_homes": {
+  "apartments": [
+    {
+      "id": "unity_homes",
       "name": "Unity Homes",
       "description": "A well-maintained apartment complex with 50 rooms.",
       "rooms": [
@@ -8,7 +9,7 @@
           "id": 1,
           "number": 101,
           "price": 1000,
-          "status": "available"
+          "status": "booked"
         },
         {
           "id": 2,
@@ -18,7 +19,8 @@
         }
       ]
     },
-    "brookvile_apartments": {
+    {
+      "id": "brookvile_apartments",
       "name": "Brookvile Apartments",
       "description": "A cozy apartment building with 25 rooms.",
       "rooms": [
@@ -36,7 +38,7 @@
         }
       ]
     }
-  },
+  ],
   "registeredUsers": [
     {
       "id": "1",
@@ -55,10 +57,22 @@
       "room": 201
     },
     {
-      "id": "d0ae",
-      "name": "",
-      "email": "",
-      "password": ""
+      "id": "cdee",
+      "name": "Nicholas Kibet",
+      "email": "nickkorir08@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "37a8",
+      "name": "Nicholas Kibet",
+      "email": "nickkorir08@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "12df",
+      "name": "Nicholas Kibet",
+      "email": "nickkorir08@gmail.com",
+      "password": "1234"
     }
   ],
   "sessions": [

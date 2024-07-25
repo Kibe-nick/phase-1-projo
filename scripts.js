@@ -65,19 +65,98 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // View Profile
-        document.getElementById('viewProfile').addEventListener('click', (event) => {
-            event.preventDefault();
-            modals.viewProfile.style.display = 'block';
-            profileDropdown.style.display = 'none';
-        });
+       // Function to fetch user details and display them in the profile modal
+function displayUserProfile(userId) {
+    fetch(`http://localhost:3000/registeredUsers/${userId}`)
+        .then(response => response.json())
+        .then(user => {
+            if (user) {
+                document.getElementById('profileName').innerText = user.name || 'N/A';
+                document.getElementById('profileEmail').innerText = user.email || 'N/A';
+                document.getElementById('profileApartment').innerText = user.apartment || 'N/A';
+                document.getElementById('profileRoom').innerText = user.room || 'N/A';
+            } else {
+                console.error('User not found');
+            }
+        })
+        .catch(error => console.error('Error fetching user profile:', error));
+}
 
-        // Edit Profile
-        document.getElementById('editProfile').addEventListener('click', (event) => {
-            event.preventDefault();
-            modals.editProfile.style.display = 'block';
-            profileDropdown.style.display = 'none';
-        });
+// View Profile Event Listener
+document.getElementById('viewProfile').addEventListener('click', (event) => {
+    event.preventDefault();
+    
+    // Retrieve the user ID from sessionStorage
+    const userId = sessionStorage.getItem('userId');
+    
+    if (userId) {
+        displayUserProfile(userId);
+        modals.viewProfile.style.display = 'block';
+        profileDropdown.style.display = 'none';
+    } else {
+        console.error('No user ID found in sessionStorage');
+    }
+});
+
+
+        // Edit Profile Event Listener
+document.getElementById('updateProfileForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        console.error('No user ID found in sessionStorage');
+        return;
+    }
+
+    const name = document.getElementById('updateName').value.trim();
+    const email = document.getElementById('updateEmail').value.trim();
+    const password = document.getElementById('updatePassword').value.trim();
+    const apartment = document.getElementById('updateApartment').value;
+    const room = document.getElementById('updateRoom').value;
+
+    // Basic validation
+    if (!name || !email || !room) {
+        alert('Name, email, and room are required');
+        return;
+    }
+
+    const updatedUser = {
+        name,
+        email,
+        password: password || undefined, // Update password only if provided
+        apartment,
+        room
+    };
+
+    fetch(`http://localhost:3000/registeredUsers/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedUser)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data) {
+            alert('Profile updated successfully');
+            modals.editProfile.style.display = 'none';
+        } else {
+            console.error('Error updating profile');
+            alert('Profile update failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating profile:', error);
+        alert('Profile update failed');
+    });
+});
+
+// Cancel Edit Profile Event Listener
+document.getElementById('cancelEditProfile').addEventListener('click', () => {
+    modals.editProfile.style.display = 'none';
+});
+
 
         // Logout
         document.getElementById('logout').addEventListener('click', (event) => {
@@ -160,15 +239,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const apartmentDetailsModal = modals.apartmentDetails;
         const apartmentDetailsContainer = document.querySelector('#apartmentDetailsContainer');
         const closeModalButton = apartmentDetailsModal.querySelector('.close');
-    
+     // Add click event listeners to each apartment button
         apartmentButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const apartmentKey = button.parentElement.getAttribute('data-apartment');
-                fetch(`http://localhost:3000/apartments`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const apartment = data[apartmentKey];
+                const apartmentKey = button.getAttribute('data-apartment');
+                fetch('http://localhost:3000/apartments')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Check the structure of 'data'
+                    const apartments = data.apartments;
+                    if (apartments) {
+                        const apartment = apartments[apartmentKey];
                         if (apartment) {
+                            // Format and display apartment details
                             const apartmentDetails = `
                                 <h2>${apartment.name}</h2>
                                 <p>${apartment.description || 'No description available.'}</p>
@@ -184,24 +272,32 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else {
                             apartmentDetailsContainer.innerHTML = '<p>Apartment not found.</p>';
                         }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching apartment details:', error);
-                        apartmentDetailsContainer.innerHTML = '<p>Unable to fetch details. Please try again later.</p>';
-                    });
-            });
+                    } else {
+                        apartmentDetailsContainer.innerHTML = '<p>No apartments data available.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching apartment details:', error);
+                    apartmentDetailsContainer.innerHTML = '<p>Unable to fetch details. Please try again later.</p>';
+                });
         });
-    
-        closeModalButton.addEventListener('click', () => {
+    });
+
+    // Close modal button event listener
+    closeModalButton.addEventListener('click', () => {
+        apartmentDetailsModal.style.display = 'none';
+    });
+
+    // Click outside modal to close it
+    window.addEventListener('click', (event) => {
+        if (event.target === apartmentDetailsModal) {
             apartmentDetailsModal.style.display = 'none';
-        });
-    
-        window.addEventListener('click', (event) => {
-            if (event.target === apartmentDetailsModal) {
-                apartmentDetailsModal.style.display = 'none';
-            }
-        });
-    }
+        }
+    });
+}
+
+// Initialize the function
+initApartmentDetails();
     
     // Initialize Authentication Modals
     function initAuth(modals) {
@@ -217,62 +313,71 @@ document.addEventListener('DOMContentLoaded', () => {
             modals.login.style.display = 'block';
         });
         // Handle Registration Form Submission
-        document.getElementById('registrationForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-  // Basic validation
-            if (!name || !email || !password) {
-                alert('All fields are required');
-             return;
-            }
-            try {
-                const response = await fetch('http://localhost:3000/registeredUsers', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
-                });
-        
-                if (response.ok) {
-                    alert('Registration successful');
-                    document.getElementById('registerModal').style.display = 'none';
-                } else {
-                    const errorData = await response.json();
-                    alert(`Registration failed: ${errorData.message}`);
-                }
-            } catch (error) {
-                console.error('Error during registration:', error);
-                alert('Registration failed. Please try again.');
-            }
+document.getElementById('register-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    // Basic validation
+    if (!name || !email || !password) {
+        alert('All fields are required');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/registeredUsers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
         });
+
+        if (response.ok) {
+            alert('Registration successful');
+            document.getElementById('registerModal').style.display = 'none';
+        } else {
+            const errorData = await response.json();
+            alert(`Registration failed: ${errorData.message}`);
+        }
+    } catch (error) {
+        console.error('Error during registration:', error);
+        alert('Registration failed. Please try again.');
+    }
+});
+
         
         // Handle Login Form Submission
-        document.getElementById('loginForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-        // Basic validation
-        if (!email || !password) {
-             alert('Email and password are required');
-             return;
+document.getElementById('login-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    // Basic validation
+    if (!email || !password) {
+        alert('Email and password are required');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/registeredUsers?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+        const users = await response.json();
+
+        if (users.length > 0) {
+            const user = users[0]; // Assuming unique email/password combination
+            sessionStorage.setItem('userId', user.id); // Store user ID
+
+            alert('Login successful');
+            document.getElementById('loginModal').style.display = 'none';
+            toggleLoginRegisterVisibility(false); // Show profile icon and hide login/register buttons
+        } else {
+            alert('Invalid email or password');
         }
-        try {
-            const response = await fetch(`http://localhost:3000/registeredUsers?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
-            const users = await response.json();
+    } catch (error) {
+        console.error('Error during login:', error);
+        alert('Login failed. Please try again.');
+    }
+});
     
-            if (users.length > 0) {
-                alert('Login successful');
-                document.getElementById('loginModal').style.display = 'none';
-                toggleLoginRegisterVisibility(false); // Show profile icon and hide login/register buttons
-            } else {
-                alert('Invalid email or password');
-            }
-        } catch (error) {
-            console.error('Error during login:', error);
-            alert('Login failed. Please try again.');
-        }
-    });    
         // Show or hide login/register buttons and profile icon
         function toggleLoginRegisterVisibility(show) {
             document.getElementById('loginButton').style.display = show ? 'block' : 'none';
@@ -283,4 +388,232 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initially show login/register buttons
         toggleLoginRegisterVisibility(true);
     }
+});
+
+// display registered users
+const displayUsers = (users) => {
+    const userList = document.getElementById('user-list'); // Assuming you have an element with id 'user-list'
+    userList.innerHTML = ''; // Clear existing content
+  
+    users.forEach(user => {
+      const listItem = document.createElement('li');
+      listItem.textContent = `${user.name} (${user.email})`;
+      userList.appendChild(listItem);
+    });
+  };
+  
+  fetch('http://localhost:3000/registeredUsers')
+    .then(response => response.json())
+    .then(data => displayUsers(data));
+
+    // Register new users
+  
+    const registerForm = document.getElementById('register-form'); // Assuming you have a form with id 'register-form'
+
+registerForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const apartment = document.getElementById('apartment').value; // Assuming you have a dropdown for apartments
+  const room = document.getElementById('room').value; // Assuming you have a dropdown for rooms
+
+  const newUser = {
+    name,
+    email,
+    password,
+    apartment,
+    room
+  };
+
+  fetch('http://localhost:3000/registeredUsers', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newUser)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('User registered:', data);
+    fetch('http://localhost:3000/registeredUsers')
+      .then(response => response.json())
+      .then(data => displayUsers(data)); // Refresh the user list
+  });
+});
+
+// login functionality
+const loginForm = document.getElementById('login-form'); // Assuming you have a form with id 'login-form'
+
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  fetch('http://localhost:3000/registeredUsers')
+    .then(response => response.json())
+    .then(users => {
+      const user = users.find(user => user.email === email && user.password === password);
+      if (user) {
+        console.log('Login successful:', user);
+        // Handle session creation and redirect or show user dashboard
+      } else {
+        console.log('Invalid credentials');
+      }
+    });
+});
+
+// handle notification
+const userId = 1; // Replace with the actual logged-in user ID
+
+fetch(`http://localhost:3000/notifications?userId=${userId}`)
+  .then(response => response.json())
+  .then(notifications => {
+    const notificationList = document.getElementById('notification-list'); // Assuming you have an element with id 'notification-list'
+    notificationList.innerHTML = '';
+
+    notifications.forEach(notification => {
+      const listItem = document.createElement('li');
+      listItem.textContent = notification.message;
+      notificationList.appendChild(listItem);
+    });
+  });
+
+  // book a room
+  const bookRoom = (apartmentId, roomId) => {
+    fetch(`http://localhost:3000/apartments/${apartmentId}`)
+      .then(response => response.json())
+      .then(apartment => {
+        const room = apartment.rooms.find(room => room.id === roomId);
+        if (room.status === 'available') {
+          room.status = 'booked';
+          
+          fetch(`http://localhost:3000/apartments/${apartmentId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(apartment)
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Room booked:', data);
+            // Update UI to reflect booking
+          });
+        } else {
+          console.log('Room already booked');
+        }
+      });
+  };
+  
+  // Example call to book a room
+  bookRoom('unity_homes', 1);
+  
+// Show View Profile Modal with Current User Data
+document.getElementById('viewProfile').addEventListener('click', async () => {
+    const userId = sessionStorage.getItem('userId'); // Retrieve user ID from session storage
+
+    if (userId) {
+        try {
+            const response = await fetch(`http://localhost:3000/registeredUsers/${userId}`);
+            const user = await response.json();
+
+            if (response.ok) {
+                // Populate profile details in the modal
+                document.getElementById('profileName').textContent = user.name;
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('profileApartment').textContent = user.apartment || 'Not assigned';
+                document.getElementById('profileRoom').textContent = user.room || 'Not assigned';
+
+                // Show the profile modal
+                modals.viewProfile.style.display = 'block';
+                profileDropdown.style.display = 'none';
+            } else {
+                console.error('Error fetching user data:', user.message);
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    } else {
+        console.error('No user ID found in sessionStorage');
+    }
+});
+
+// Hide View Profile Modal
+document.querySelector('#viewProfileModal .close').addEventListener('click', () => {
+    modals.viewProfile.style.display = 'none';
+});
+
+// Show Edit Profile Modal with Current User Data
+document.getElementById('editProfile').addEventListener('click', async () => {
+    const userId = sessionStorage.getItem('userId'); // Retrieve user ID from session storage
+
+    if (userId) {
+        try {
+            const response = await fetch(`http://localhost:3000/registeredUsers/${userId}`);
+            const user = await response.json();
+
+            if (response.ok) {
+                // Populate the form fields with the current user data
+                document.getElementById('updateName').value = user.name;
+                document.getElementById('updateEmail').value = user.email;
+                document.getElementById('updateApartment').value = user.apartment || 'unity_homes';
+                document.getElementById('updateRoom').value = user.room || '';
+
+                // Show the edit profile modal
+                modals.editProfile.style.display = 'block';
+                profileDropdown.style.display = 'none';
+            } else {
+                console.error('Error fetching user data:', user.message);
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    } else {
+        console.error('No user ID found in sessionStorage');
+    }
+});
+
+// Handle Profile Update Form Submission
+document.getElementById('updateProfileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const userId = sessionStorage.getItem('userId'); // Retrieve user ID from session storage
+    const name = document.getElementById('updateName').value.trim();
+    const email = document.getElementById('updateEmail').value.trim();
+    const password = document.getElementById('updatePassword').value.trim();
+    const apartment = document.getElementById('updateApartment').value;
+    const room = document.getElementById('updateRoom').value;
+
+    if (!name || !email || !room) {
+        alert('Name, email, and room are required');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/registeredUsers/${userId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password, apartment, room })
+        });
+
+        if (response.ok) {
+            alert('Profile updated successfully');
+            modals.editProfile.style.display = 'none';
+            // Optionally refresh profile data if needed
+        } else {
+            const errorData = await response.json();
+            alert(`Update failed: ${errorData.message}`);
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('Update failed. Please try again.');
+    }
+});
+
+// Hide Edit Profile Modal
+document.getElementById('cancelEditProfile').addEventListener('click', () => {
+    modals.editProfile.style.display = 'none';
 });
