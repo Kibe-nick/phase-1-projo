@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         register: document.getElementById('registerModal'),
         login: document.getElementById('loginModal')
     };
-
+       
     // Initialize Sidebar and Navbar
     initSidebar();
     initProfileDropdown();
@@ -151,6 +151,7 @@ document.getElementById('updateProfileForm').addEventListener('submit', (event) 
         alert('Profile update failed');
     });
 });
+console.log('Edit Profile button clicked');
 
 // Cancel Edit Profile Event Listener
 document.getElementById('cancelEditProfile').addEventListener('click', () => {
@@ -158,13 +159,54 @@ document.getElementById('cancelEditProfile').addEventListener('click', () => {
 });
 
 
-        // Logout
-        document.getElementById('logout').addEventListener('click', (event) => {
-            event.preventDefault();
-            alert('Logged out successfully');
-            profileDropdown.style.display = 'none';
-            toggleLoginRegisterVisibility(true);
-        });
+        // Function to toggle visibility of login and register elements
+function toggleLoginRegisterVisibility(show) {
+    const loginButton = document.getElementById('loginButton');
+    const registerButton = document.getElementById('registerButton');
+    
+    if (loginButton && registerButton) {
+    if (show) {
+        loginButton.style.display = 'block';
+        registerButton.style.display = 'block';
+    } else {
+        loginButton.style.display = 'none';
+        registerButton.style.display = 'none';
+    }
+} else {
+    console.error('Login or Register buttons not found.');
+}
+}
+
+// Logout
+document.getElementById('logout').addEventListener('click', (event) => {
+    event.preventDefault();
+    
+    // Clear session data
+    sessionStorage.removeItem('userId');
+    
+    // Notify user
+    alert('Logged out successfully');
+    
+    // Hide profile dropdown and profile icon
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileIcon = document.getElementById('profileIcon');
+    
+    if (profileDropdown) {
+        profileDropdown.style.display = 'none';
+    } else {
+        console.error('Profile dropdown not found.');
+    }
+    
+    if (profileIcon) {
+        profileIcon.style.display = 'none';
+    } else {
+        console.error('Profile icon not found.');
+    }
+    
+    // Toggle visibility of login/register buttons
+    toggleLoginRegisterVisibility(true);
+});
+
     }
 
     // Initialize Modals
@@ -562,6 +604,7 @@ document.getElementById('editProfile').addEventListener('click', async () => {
                 document.getElementById('updateApartment').value = user.apartment || 'unity_homes';
                 document.getElementById('updateRoom').value = user.room || '';
 
+                   
                 // Show the edit profile modal
                 modals.editProfile.style.display = 'block';
                 profileDropdown.style.display = 'none';
@@ -579,6 +622,8 @@ document.getElementById('editProfile').addEventListener('click', async () => {
 // Handle Profile Update Form Submission
 document.getElementById('updateProfileForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    console.log('Update Profile form submitted');
+
     
     const userId = sessionStorage.getItem('userId'); // Retrieve user ID from session storage
     const name = document.getElementById('updateName').value.trim();
@@ -615,5 +660,33 @@ document.getElementById('updateProfileForm').addEventListener('submit', async (e
 
 // Hide Edit Profile Modal
 document.getElementById('cancelEditProfile').addEventListener('click', () => {
+    //console.log('Cancel Edit Profile button clicked');
     modals.editProfile.style.display = 'none';
 });
+ // View Profile
+ document.getElementById('viewProfile').addEventListener('click', (event) => {
+    event.preventDefault();
+    console.log('View Profile button clicked');
+
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        console.error('No user ID found in sessionStorage');
+        return;
+    }
+
+    fetch(`http://localhost:3000/registeredUsers/${userId}`)
+        .then(response => response.json())
+        .then(user => {
+            console.log('User data fetched for view:', user);
+            document.getElementById('profileName').innerText = user.name;
+            document.getElementById('profileEmail').innerText = user.email;
+            document.getElementById('profileApartment').innerText = user.apartment;
+            document.getElementById('profileRoom').innerText = user.room;
+
+            modals.viewProfile.style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+        });
+});
+; 
