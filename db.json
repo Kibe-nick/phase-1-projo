@@ -16,6 +16,24 @@
           "number": 102,
           "price": 1000,
           "status": "available"
+        },
+        {
+          "id": 3,
+          "number": 103,
+          "price": 1000,
+          "status": "booked"
+        },
+        {
+          "id": 4,
+          "number": 104,
+          "price": 1000,
+          "status": "booked"
+        },
+        {
+          "id": 5,
+          "number": 105,
+          "price": 1000,
+          "status": "booked"
         }
       ]
     },
@@ -33,6 +51,24 @@
         {
           "id": 2,
           "number": 202,
+          "price": 1200,
+          "status": "available"
+        },
+        {
+          "id": 3,
+          "number": 203,
+          "price": 1200,
+          "status": "available"
+        },
+        {
+          "id": 4,
+          "number": 204,
+          "price": 1200,
+          "status": "available"
+        },
+        {
+          "id": 5,
+          "number": 205,
           "price": 1200,
           "status": "available"
         }

@@ -272,75 +272,7 @@ document.getElementById('logout').addEventListener('click', (event) => {
         });
 
         updateNotificationCount();
-    }
-
-    // Initialize Apartment Details Modal
-    // Fetch apartment details by ID or name
-    function initApartmentDetails() {
-        const apartmentButtons = document.querySelectorAll('.view-details');
-        const apartmentDetailsModal = modals.apartmentDetails;
-        const apartmentDetailsContainer = document.querySelector('#apartmentDetailsContainer');
-        const closeModalButton = apartmentDetailsModal.querySelector('.close');
-     // Add click event listeners to each apartment button
-        apartmentButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const apartmentKey = button.getAttribute('data-apartment');
-                fetch('http://localhost:3000/apartments')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Check the structure of 'data'
-                    const apartments = data.apartments;
-                    if (apartments) {
-                        const apartment = apartments[apartmentKey];
-                        if (apartment) {
-                            // Format and display apartment details
-                            const apartmentDetails = `
-                                <h2>${apartment.name}</h2>
-                                <p>${apartment.description || 'No description available.'}</p>
-                                <p>Total Rooms: ${apartment.rooms.length}</p>
-                                <ul>
-                                    ${apartment.rooms.map(room => `
-                                        <li>Room ${room.number}: ${room.status} - Price: $${room.price}</li>
-                                    `).join('')}
-                                </ul>
-                            `;
-                            apartmentDetailsContainer.innerHTML = apartmentDetails;
-                            apartmentDetailsModal.style.display = 'block';
-                        } else {
-                            apartmentDetailsContainer.innerHTML = '<p>Apartment not found.</p>';
-                        }
-                    } else {
-                        apartmentDetailsContainer.innerHTML = '<p>No apartments data available.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching apartment details:', error);
-                    apartmentDetailsContainer.innerHTML = '<p>Unable to fetch details. Please try again later.</p>';
-                });
-        });
-    });
-
-    // Close modal button event listener
-    closeModalButton.addEventListener('click', () => {
-        apartmentDetailsModal.style.display = 'none';
-    });
-
-    // Click outside modal to close it
-    window.addEventListener('click', (event) => {
-        if (event.target === apartmentDetailsModal) {
-            apartmentDetailsModal.style.display = 'none';
-        }
-    });
-}
-
-// Initialize the function
-initApartmentDetails();
-    
+    }    
     // Initialize Authentication Modals
     function initAuth(modals) {
         const registerBtn = document.getElementById('registerButton');
@@ -431,23 +363,6 @@ document.getElementById('login-form').addEventListener('submit', async function 
         toggleLoginRegisterVisibility(true);
     }
 });
-
-// display registered users
-const displayUsers = (users) => {
-    const userList = document.getElementById('user-list'); // Assuming you have an element with id 'user-list'
-    userList.innerHTML = ''; // Clear existing content
-  
-    users.forEach(user => {
-      const listItem = document.createElement('li');
-      listItem.textContent = `${user.name} (${user.email})`;
-      userList.appendChild(listItem);
-    });
-  };
-  
-  fetch('http://localhost:3000/registeredUsers')
-    .then(response => response.json())
-    .then(data => displayUsers(data));
-
     // Register new users
   
     const registerForm = document.getElementById('register-form'); // Assuming you have a form with id 'register-form'
@@ -523,35 +438,6 @@ fetch(`http://localhost:3000/notifications?userId=${userId}`)
     });
   });
 
-  // book a room
-  const bookRoom = (apartmentId, roomId) => {
-    fetch(`http://localhost:3000/apartments/${apartmentId}`)
-      .then(response => response.json())
-      .then(apartment => {
-        const room = apartment.rooms.find(room => room.id === roomId);
-        if (room.status === 'available') {
-          room.status = 'booked';
-          
-          fetch(`http://localhost:3000/apartments/${apartmentId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(apartment)
-          })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Room booked:', data);
-            // Update UI to reflect booking
-          });
-        } else {
-          console.log('Room already booked');
-        }
-      });
-  };
-  
-  // Example call to book a room
-  bookRoom('unity_homes', 1);
   
 // Show View Profile Modal with Current User Data
 document.getElementById('viewProfile').addEventListener('click', async () => {
@@ -690,3 +576,146 @@ document.getElementById('cancelEditProfile').addEventListener('click', () => {
         });
 });
 ; 
+// Function to initialize apartment details view
+function initApartmentDetails() {
+    const apartmentButtons = document.querySelectorAll('.view-details');
+    const apartmentDetailsModal = document.getElementById('apartmentDetailsModal');
+    const apartmentDetailsContainer = document.getElementById('apartmentDetailsContainer');
+    const closeModalButton = apartmentDetailsModal.querySelector('.close');
+
+    // Add click event listeners to each apartment button
+    apartmentButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            console.log('View Details button clicked'); // Log message to confirm click
+            const apartmentKey = button.getAttribute('data-apartment');
+            console.log('Apartment key:', apartmentKey); // Log the apartment key
+            fetchApartmentDetails(apartmentKey);
+        });
+    });
+
+    // Close modal button event listener
+    closeModalButton.addEventListener('click', () => {
+        apartmentDetailsModal.style.display = 'none';
+    });
+
+    // Click outside modal to close it
+    window.addEventListener('click', (event) => {
+        if (event.target === apartmentDetailsModal) {
+            apartmentDetailsModal.style.display = 'none';
+        }
+    });
+// Fetch apartment details by ID or name
+function fetchApartmentDetails(apartmentKey) {
+    fetch('http://localhost:3000/apartments')
+        .then(response => response.json())
+        .then(data => {
+            // Debugging output to verify data structure
+            console.log('Fetched data:', data);
+
+            // Check if data is an array of apartments
+            if (!Array.isArray(data)) {
+                throw new Error('Data is not an array of apartments.');
+            }
+
+            const apartments = data;
+            console.log('Apartment Key:', apartmentKey);
+            console.log('Available Apartments:', apartments);
+
+            // Find the apartment with the matching id
+            const apartment = apartments.find(apartment => apartment.id === apartmentKey);
+
+            // Debugging output to verify the found apartment
+            if (apartment) {
+                console.log('Found Apartment:', apartment);
+                const apartmentDetails = `
+                    <h2>${apartment.name}</h2>
+                    <p>${apartment.description || 'No description available.'}</p>
+                    <p>Total Rooms: ${apartment.rooms.length}</p>
+                    <ul>
+                        ${apartment.rooms.map(room => `
+                            <li>
+                                Room ${room.number}: ${room.status} - Price: $${room.price}
+                                ${room.status === 'available' ? '<button class="book-room-btn" data-room-id="' + room.id + '">Book</button>' : ''}
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                apartmentDetailsContainer.innerHTML = apartmentDetails;
+                apartmentDetailsModal.style.display = 'block';
+            } else {
+                console.log('Apartment not found with key:', apartmentKey);
+                apartmentDetailsContainer.innerHTML = '<p>Apartment not found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching apartment details:', error);
+            apartmentDetailsContainer.innerHTML = '<p>Unable to fetch details. Please try again later.</p>';
+        });
+}
+
+   
+
+    // Event listener for booking a room
+    apartmentDetailsContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('book-room-btn')) {
+            const roomId = event.target.getAttribute('data-room-id');
+            const apartmentKey = event.target.closest('.modal-content').querySelector('h2').textContent;
+            bookRoom(apartmentKey, roomId);
+        }
+    });
+}
+
+// Function to book a room
+const bookRoom = (apartmentId, roomId) => {
+    // Fetch the list of apartments
+    fetch('http://localhost:3000/apartments')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched apartments data:', data); // Log the fetched data
+
+            // Find the apartment by ID
+            const apartment = data.find(apartment => apartment.id === apartmentId);
+            if (apartment) {
+                console.log('Found apartment:', apartment); // Log the found apartment
+
+                // Find the room by ID
+                const room = apartment.rooms.find(room => room.id === parseInt(roomId, 10));
+                if (room) {
+                    if (room.status === 'available') {
+                        room.status = 'booked';
+
+                        // Update the room status in the data and send a PUT request
+                        fetch(`http://localhost:3000/apartments/${apartmentId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Room booked:', data); // Log the booking confirmation
+                            alert('Room booked successfully!');
+                            // Update UI to reflect booking
+                            const roomElement = document.querySelector(`button[data-room-id="${roomId}"]`).parentElement;
+                            roomElement.innerHTML = `Room ${room.number}: Booked - Price: $${room.price}`;
+                        });
+                    } else {
+                        alert('Room already booked');
+                    }
+                } else {
+                    alert('Room not found');
+                }
+            } else {
+                alert('Apartment not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error booking room:', error);
+            alert('Unable to book room. Please try again later.');
+        });
+};
+
+
+// Initialize the function
+initApartmentDetails();
